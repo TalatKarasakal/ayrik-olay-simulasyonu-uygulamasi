@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*-enhanced'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and verify
+        run: mvn -B verify
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/ayrik-olay-simulasyonu-*-enhanced.jar
+          generate_release_notes: true
+          name: "Enhanced Fork ${{ github.ref_name }}"
+          body: |
+            ## Ayrik Olay Simulasyonu — Enhanced Fork ${{ github.ref_name }}
+
+            Maven ile derlenmiş, JUnit 5 testleri geçmiş, çalıştırılabilir jar.
+
+            ### Kullanım
+            ```bash
+            java -jar ayrik-olay-simulasyonu-*-enhanced.jar <workflow>.txt <job>.txt
+            ```
+
+            > ⚠️ Bu release `enhanced-personal-fork` branch'ine ait olup orijinal projenin versiyon namespace'inden bağımsızdır.

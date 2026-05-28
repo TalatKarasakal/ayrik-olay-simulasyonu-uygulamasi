@@ -4,6 +4,9 @@
 
 Bu repo, orijinal **ayrik-olay-simulasyonu-uygulamasi** projesinin kişisel bir fork'udur.
 
+[![CI](https://github.com/TalatKarasakal/ayrik-olay-simulasyonu-uygulamasi/actions/workflows/ci.yml/badge.svg?branch=enhanced-personal-fork)](https://github.com/TalatKarasakal/ayrik-olay-simulasyonu-uygulamasi/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/TalatKarasakal/ayrik-olay-simulasyonu-uygulamasi?filter=v*-enhanced&label=release&color=blue)](https://github.com/TalatKarasakal/ayrik-olay-simulasyonu-uygulamasi/releases)
+
 > ⚠️ **Personal Enhanced Fork — `enhanced-personal-fork` branch'i**
 > Bu fork, orijinal projenin `master` branch'inde dokunmaz. `enhanced-personal-fork` branch'inde modern build sistemi (Maven), test framework (JUnit 5) ve CI pipeline eklenmiştir. Kodun çekirdek mantığı orijinal ekibe aittir.
 
