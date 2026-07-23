@@ -13,6 +13,20 @@ public class WorkflowFileParser {
     private Map<String, JobType> jobTypes = new HashMap<>();
     private Map<String, Station> stations = new HashMap<>();
     private List<String> errorMessages = new ArrayList<>();
+    private boolean strict = true;
+
+    /**
+     * In strict mode (the default, used by the command line entry point) a parse error
+     * terminates the JVM, preserving the original behaviour. The GUI turns strict mode off
+     * so that errors can be surfaced in the window instead of killing the application.
+     */
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
+
+    public boolean isStrict() {
+        return strict;
+    }
 
     public Map<String, TaskType> getTaskTypes() {
         return taskTypes;
@@ -230,7 +244,9 @@ public class WorkflowFileParser {
             for (String error : errorMessages) {
                 System.out.println(error);
             }
-            System.exit(1);
+            if (strict) {
+                System.exit(1);
+            }
         }
     }
 }

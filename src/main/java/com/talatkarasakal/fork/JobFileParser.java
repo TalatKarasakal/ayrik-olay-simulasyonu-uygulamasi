@@ -10,16 +10,35 @@ import java.util.Scanner;
 
 public class JobFileParser {
     private Map<String, JobType> jobTypes;
+    private List<String> errorMessages = new ArrayList<>();
+    private boolean strict = true;
 
     public JobFileParser(Map<String, JobType> jobTypes) {
         this.jobTypes = jobTypes;
+    }
+
+    /**
+     * In strict mode (the default, used by the command line entry point) a parse error
+     * terminates the JVM, preserving the original behaviour. The GUI turns strict mode off
+     * so that errors can be surfaced in the window instead of killing the application.
+     */
+    public void setStrict(boolean strict) {
+        this.strict = strict;
+    }
+
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public List<String> getErrorMessages() {
+        return errorMessages;
     }
 
     public Map<String, Job> parse(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(file);
 
         Map<String, Job> jobs = new HashMap<>();
-        List<String> errorMessages = new ArrayList<>();
+        errorMessages = new ArrayList<>();
         int lineNumber = 1;
 
         while (sc.hasNextLine()) {
@@ -71,7 +90,9 @@ public class JobFileParser {
             for (String error : errorMessages) {
                 System.out.println(error);
             }
-            System.exit(1);
+            if (strict) {
+                System.exit(1);
+            }
         }
         return jobs;
     }
