@@ -71,6 +71,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!-- CI has no display; pinning this locally too means a test that
+                             accidentally opens a window fails on the developer's machine
+                             rather than only in the pipeline. -->
+                        <java.awt.headless>true</java.awt.headless>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
 
             <!-- Plain jar with manifest -->
