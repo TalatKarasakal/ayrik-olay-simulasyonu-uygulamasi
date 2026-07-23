@@ -32,8 +32,16 @@ jobs:
             ## Ayrik Olay Simulasyonu — Enhanced Fork ${{ github.ref_name }}
 
             Maven ile derlenmiş, JUnit 5 testleri geçmiş, çalıştırılabilir jar.
+            Grafik arayüz ve komut satırı aynı jar içinde.
 
             ### Kullanım
+
+            Grafik arayüz (argümansız):
+            ```bash
+            java -jar ayrik-olay-simulasyonu-*-enhanced.jar
+            ```
+
+            Komut satırı:
             ```bash
             java -jar ayrik-olay-simulasyonu-*-enhanced.jar <workflow>.txt <job>.txt
             ```

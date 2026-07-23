@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [enhanced-personal-fork]
+    branches: [master, enhanced-personal-fork]
   pull_request:
-    branches: [enhanced-personal-fork]
+    branches: [master, enhanced-personal-fork]
 
 jobs:
   build:
