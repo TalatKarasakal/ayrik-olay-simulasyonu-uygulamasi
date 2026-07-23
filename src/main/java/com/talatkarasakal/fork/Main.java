@@ -1,24 +1,63 @@
 package com.talatkarasakal.fork;
 
+import com.talatkarasakal.fork.ui.SimulatorApp;
+
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
+/**
+ * Entry point for both interfaces.
+ *
+ * <ul>
+ *   <li>no arguments — opens the graphical interface</li>
+ *   <li>{@code --gui [workflow] [job]} — opens the graphical interface, files preselected</li>
+ *   <li>{@code <workflow>.txt <job>.txt} — runs the simulation on the command line</li>
+ * </ul>
+ */
 public class Main {
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.out.println("Please enter two file names from the command line.");
-            System.out.println("Usage: java -jar ayrik-olay-simulasyonu-1.0.0-enhanced.jar <workflow>.txt <job>.txt");
+        if (args.length == 0) {
+            launchGui(null, null);
             return;
         }
 
-        String fileName1 = args[0];
-        String fileName2 = args[1];
+        if ("--gui".equals(args[0]) || "-g".equals(args[0])) {
+            launchGui(args.length > 1 ? new File(args[1]) : null,
+                    args.length > 2 ? new File(args[2]) : null);
+            return;
+        }
 
+        if (args.length < 2) {
+            printUsage();
+            return;
+        }
+
+        runCommandLine(args[0], args[1]);
+    }
+
+    private static void launchGui(File first, File second) {
+        if (GraphicsEnvironment.isHeadless()) {
+            System.out.println("No display available, so the graphical interface cannot start.");
+            printUsage();
+            return;
+        }
+        SimulatorApp.launch(first, second);
+    }
+
+    private static void printUsage() {
+        System.out.println("Please enter two file names from the command line.");
+        System.out.println("Usage: java -jar ayrik-olay-simulasyonu-1.0.0-enhanced.jar "
+                + "<workflow>.txt <job>.txt");
+        System.out.println("       java -jar ayrik-olay-simulasyonu-1.0.0-enhanced.jar "
+                + "            (opens the graphical interface)");
+    }
+
+    private static void runCommandLine(String fileName1, String fileName2) {
         File file1 = new File(fileName1);
         File file2 = new File(fileName2);
 
@@ -30,12 +69,12 @@ public class Main {
             Map<String, JobType> jobTypes;
             Map<String, Job> jobs;
 
-            if (isWorkflowFile(file1)) {
+            if (SimulationRunner.isWorkflowFile(file1)) {
                 stations = workflowParser.parse(file1);
                 jobTypes = workflowParser.getJobTypes();
                 jobParser = new JobFileParser(jobTypes);
                 jobs = jobParser.parse(file2);
-            } else if (isWorkflowFile(file2)) {
+            } else if (SimulationRunner.isWorkflowFile(file2)) {
                 stations = workflowParser.parse(file2);
                 jobTypes = workflowParser.getJobTypes();
                 jobParser = new JobFileParser(jobTypes);
@@ -92,18 +131,5 @@ public class Main {
             System.out.println("Something went wrong: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    private static boolean isWorkflowFile(File file) throws FileNotFoundException {
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()) {
-            String line = sc.nextLine().trim();
-            if (line.startsWith("(") || line.endsWith(")")) {
-                sc.close();
-                return true;
-            }
-        }
-        sc.close();
-        return false;
     }
 }

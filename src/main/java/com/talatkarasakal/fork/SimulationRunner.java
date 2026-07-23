@@ -7,10 +7,10 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * Drives a complete simulation and returns a structured {@link SimulationResult}.
@@ -118,7 +118,9 @@ public final class SimulationRunner {
                 .max()
                 .orElse(0);
 
-        Map<String, List<Job>> jobsByType = new HashMap<>();
+        // A sorted map keeps the reported job-type order stable from run to run, which a HashMap
+        // would not guarantee.
+        Map<String, List<Job>> jobsByType = new TreeMap<>();
         for (Job job : jobs.values()) {
             jobsByType.computeIfAbsent(job.getJobType().getJobTypeID(), k -> new ArrayList<>()).add(job);
         }
